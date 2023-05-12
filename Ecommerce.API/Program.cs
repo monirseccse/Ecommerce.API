@@ -1,6 +1,7 @@
 using Domain.Repositories;
 using Infrastructure.DbContexts;
 using Infrastructure.Repositories;
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.EntityFrameworkCore;
 
 try
@@ -18,8 +19,8 @@ try
         options.UseSqlServer(connectionstring, m => m.MigrationsAssembly(assemblyName));
     });
 
-    //builder.Services.AddScoped<IProductRepository, ProductRepository>();
-
+    builder.Services.AddScoped<IProductRepository, ProductRepository>();
+    builder.Services.AddScoped(typeof(IRepository<,>),typeof(Repository<,>));
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();

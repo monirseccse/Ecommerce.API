@@ -1,6 +1,10 @@
-﻿namespace Domain.Repositories
+﻿using Domain.Common;
+
+namespace Domain.Repositories
 {
-    public interface IRepository<Tkey, TEntity> where TEntity : class
+    public interface IRepository<TEntity> where TEntity : BaseEntity
     {
+        Task<TEntity> GetByIdAsync(int id);
+        Task<IList<TEntity>> GetAllAsync();
     }
 }

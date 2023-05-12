@@ -1,7 +1,7 @@
 ﻿namespace Domain.Common
 {
-    public abstract class BaseEntity<Tkey>
+    public abstract class BaseEntity
     {
-        public Tkey Id { get; set; }
+        public int Id { get; set; }
     }
 }
