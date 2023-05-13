@@ -1,4 +1,5 @@
 using Domain.Repositories;
+using Ecommerce.API.Helper;
 using Infrastructure.DbContexts;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.HttpLogging;
@@ -20,8 +21,8 @@ try
     });
 
     builder.Services.AddScoped<IProductRepository, ProductRepository>();
-    builder.Services.AddScoped(typeof(IRepository<,>),typeof(Repository<,>));
-
+    builder.Services.AddScoped(typeof(IRepository<>),typeof(Repository<>));
+    builder.Services.AddAutoMapper(typeof(MappingProfile));
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
@@ -36,6 +37,8 @@ try
     }
 
     app.UseHttpsRedirection();
+
+    app.UseStaticFiles();
 
     app.UseAuthorization();
 

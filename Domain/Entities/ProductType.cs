@@ -2,7 +2,7 @@
 
 namespace Domain.Entities
 {
-    public class ProductType : BaseEntity<int>
+    public class ProductType : BaseEntity
     {
         public string Name { get; set; }
     }
