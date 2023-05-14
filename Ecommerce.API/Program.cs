@@ -1,8 +1,8 @@
 using Domain.Repositories;
 using Ecommerce.API.Helper;
+using Ecommerce.API.Middleware;
 using Infrastructure.DbContexts;
 using Infrastructure.Repositories;
-using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.EntityFrameworkCore;
 
 try
@@ -21,7 +21,7 @@ try
     });
 
     builder.Services.AddScoped<IProductRepository, ProductRepository>();
-    builder.Services.AddScoped(typeof(IRepository<>),typeof(Repository<>));
+    builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
     builder.Services.AddAutoMapper(typeof(MappingProfile));
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
@@ -29,6 +29,7 @@ try
 
     var app = builder.Build();
 
+    app.UseMiddleware<ExceptionMiddleware>();
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {
@@ -54,7 +55,7 @@ try
 catch (Exception ex)
 {
 
-	throw;
+    throw;
 }
 
 async Task SeedDefaultDataAsync(IHost app)

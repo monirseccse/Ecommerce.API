@@ -22,7 +22,7 @@ namespace Ecommerce.API.Controllers
             var thing = _context.Products.Find(100);
 
             if (thing == null)
-                return NotFound(new ApiResponse(404);
+                return NotFound(new ApiResponse(404));
 
             return Ok();
         }
@@ -39,7 +39,7 @@ namespace Ecommerce.API.Controllers
         [HttpGet("badrequest")]
         public ActionResult GetBadRequest()
         {
-            return BadRequest(new ApiResponse(400);
+            return BadRequest(new ApiResponse(400));
         }
 
         [HttpGet("badrequest/{id}")]
