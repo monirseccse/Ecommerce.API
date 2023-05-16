@@ -4,12 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     [Route("error/{code}")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class ErrorController : ControllerBase
     {
-        [HttpGet]
         public IActionResult Error(int code)
         {
             return new ObjectResult(new ApiResponse(code));

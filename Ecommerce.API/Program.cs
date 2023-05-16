@@ -1,8 +1,11 @@
 using Domain.Repositories;
+using Ecommerce.API.Errors;
+using Ecommerce.API.Extensions;
 using Ecommerce.API.Helper;
 using Ecommerce.API.Middleware;
 using Infrastructure.DbContexts;
 using Infrastructure.Repositories;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 try
@@ -20,12 +23,20 @@ try
         options.UseSqlServer(connectionstring, m => m.MigrationsAssembly(assemblyName));
     });
 
-    builder.Services.AddScoped<IProductRepository, ProductRepository>();
-    builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+    builder.Services.AddApplicationServices();
+
     builder.Services.AddAutoMapper(typeof(MappingProfile));
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+    builder.Services.AddCors(opt =>
+        opt.AddPolicy("CorsPolicy", policy =>
+        {
+            policy.AllowAnyHeader()
+            .AllowAnyMethod()
+            .WithOrigins("https://localhost:4200");
+        })
+    ) ;
 
     var app = builder.Build();
 
@@ -42,6 +53,8 @@ try
     app.UseHttpsRedirection();
 
     app.UseStaticFiles();
+
+    app.UseCors("CorsPolicy");
 
     app.UseAuthorization();
 

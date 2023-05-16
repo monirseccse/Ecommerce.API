@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Repositories;
 using Domain.Specification;
 using Ecommerce.API.DTOs;
+using Ecommerce.API.Helper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.API.Controllers
@@ -11,23 +12,30 @@ namespace Ecommerce.API.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly IRepository<Product> _productrepository;
+        private readonly IRepository<Product> _repository;
         private readonly IMapper _mapper;
 
-        public ProductController(IRepository<Product> productrepository, IMapper mapper)
+        public ProductController(IRepository<Product> repository, IMapper mapper)
         {
-            _productrepository = productrepository;
+            _repository = repository;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<ProducttoReturnDto>>> GetProducts()
+        public async Task<ActionResult<IReadOnlyList<ProducttoReturnDto>>> GetProducts(
+            [FromQuery] ProductSpecParams specParams)
         {
-            var spec = new ProductswithBrandAndTypeSpecification();
-            var products = await _productrepository.GetAllSpecAsync(spec);
+            var spec = new ProductswithBrandAndTypeSpecification(specParams);
+            var countSpec = new ProductWithFilterForCountSpecification(specParams);
 
-            return Ok(_mapper.Map<IReadOnlyList<Product>,IReadOnlyList<ProducttoReturnDto>>
-                (products));
+            var totalItems = await _repository.CountAsync(countSpec);
+            var products = await _repository.GetAllSpecAsync(spec);
+
+           var data =_mapper.Map<IReadOnlyList<Product>,IReadOnlyList<ProducttoReturnDto>>
+                (products);
+
+            return Ok(new Pagination<ProducttoReturnDto>(
+                specParams.PageIndex, specParams.PageSize, totalItems, data));
         }
 
         [HttpGet("{id}")]
@@ -35,7 +43,7 @@ namespace Ecommerce.API.Controllers
         {
             var spec = new ProductswithBrandAndTypeSpecification(id);
 
-            var product = await _productrepository.GetByIdwithSpecAsync(spec);
+            var product = await _repository.GetByIdwithSpecAsync(spec);
 
             return _mapper.Map<Product, ProducttoReturnDto>(product);
         }

@@ -42,5 +42,10 @@ namespace Infrastructure.Repositories
             return SpecificationEvaluator<TEntity>.GetQuery(_context.Set<TEntity>().AsQueryable(),
                 spec);
         }
+
+        public async Task<int> CountAsync(ISpecification<TEntity> spec)
+        {
+            return await ApplySpecification(spec).CountAsync();
+        }
     }
 }

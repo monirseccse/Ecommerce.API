@@ -9,5 +9,6 @@ namespace Domain.Repositories
         Task<IReadOnlyList<TEntity>> GetAllAsync();
         Task<TEntity> GetByIdwithSpecAsync(ISpecification<TEntity>spec);
         Task<IReadOnlyList<TEntity>> GetAllSpecAsync(ISpecification<TEntity>spec);
+        Task<int>CountAsync(ISpecification<TEntity> spec);
     }
 }

@@ -15,6 +15,11 @@ namespace Infrastructure.Repositories
             _context= context;
         }
 
+        public Task<int> CountAsync(ISpecification<Product> spec)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<IReadOnlyList<Product>> GetAllAsync()
         {
             throw new NotImplementedException();
