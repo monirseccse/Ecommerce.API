@@ -4,12 +4,14 @@ using Domain.Repositories;
 using Domain.Specification;
 using Ecommerce.API.DTOs;
 using Ecommerce.API.Helper;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors]
     public class ProductController : ControllerBase
     {
         private readonly IRepository<Product> _repository;
