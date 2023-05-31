@@ -2,7 +2,7 @@
 {
     public class Pagination<T> where T : class
     {
-        public Pagination(int pageSize, int pageIndex, int count, IReadOnlyList<T> data)
+        public Pagination( int pageIndex, int pageSize, int count, IReadOnlyList<T> data)
         {
             PageSize = pageSize;
             PageIndex = pageIndex;

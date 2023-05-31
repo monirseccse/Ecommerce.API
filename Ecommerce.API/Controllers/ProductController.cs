@@ -15,12 +15,20 @@ namespace Ecommerce.API.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IRepository<Product> _repository;
+        private readonly IRepository<ProductBrand> _brandRepository;
+        private readonly IRepository<ProductType>_productTypeRepository;
         private readonly IMapper _mapper;
 
-        public ProductController(IRepository<Product> repository, IMapper mapper)
+        public ProductController(
+            IRepository<Product> repository,
+            IMapper mapper,
+            IRepository<ProductBrand> brandRepository,
+            IRepository<ProductType> productRepository)
         {
             _repository = repository;
             _mapper = mapper;
+            _brandRepository = brandRepository;
+            _productTypeRepository = productRepository;
         }
 
         [HttpGet]
@@ -48,6 +56,18 @@ namespace Ecommerce.API.Controllers
             var product = await _repository.GetByIdwithSpecAsync(spec);
 
             return _mapper.Map<Product, ProducttoReturnDto>(product);
+        }
+
+        [HttpGet("brands")]
+        public async Task<ActionResult<ProductBrand>>GetProductBrand()
+        {
+           return Ok(await _brandRepository.GetAllAsync());
+        }
+
+        [HttpGet("types")]
+        public async Task<ActionResult<ProductType>> GetProductTypes()
+        {
+            return Ok(await _productTypeRepository.GetAllAsync());
         }
     }
 }
