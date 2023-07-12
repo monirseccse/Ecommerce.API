@@ -7,6 +7,7 @@ using Infrastructure.DbContexts;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 try
 {
@@ -22,6 +23,14 @@ try
     {
         options.UseSqlServer(connectionstring, m => m.MigrationsAssembly(assemblyName));
     });
+
+    builder.Services.AddSingleton<ConnectionMultiplexer>(c =>
+    {
+        var configuration = ConfigurationOptions.Parse(
+            builder.Configuration.GetConnectionString("Redis"), true);
+        return ConnectionMultiplexer.Connect(configuration);
+    }
+    );
 
     builder.Services.AddApplicationServices();
 
